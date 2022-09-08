@@ -39,17 +39,19 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"PUT", "GET", "POST", "DELETE"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		// AllowOriginFunc: func(origin string) bool {
-		//  return origin == "https://mseamless.herokuapp.com"
-		// },
-		MaxAge: 12 * time.Hour,
-	}))
+	config := CORSMiddleware()
+ r.Use(config)
+// 	r.Use(cors.New(cors.Config{
+// 		AllowOrigins:     []string{"*"},
+// 		AllowMethods:     []string{"PUT", "GET", "POST", "DELETE"},
+// 		AllowHeaders:     []string{"Origin"},
+// 		ExposeHeaders:    []string{"Content-Length"},
+// 		AllowCredentials: true,
+// 		// AllowOriginFunc: func(origin string) bool {
+// 		//  return origin == "https://mseamless.herokuapp.com"
+// 		// },
+// 		MaxAge: 12 * time.Hour,
+// 	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -70,4 +72,20 @@ func main() {
 	r.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":" + port)
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+ return func(c *gin.Context) {
+  c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+  c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+  c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+  c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+  if c.Request.Method == "OPTIONS" {
+   c.AbortWithStatus(204)
+   return
+  }
+
+  c.Next()
+ }
 }
