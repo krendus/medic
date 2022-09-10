@@ -9,12 +9,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-var validate *validator.Validate
 
 // create new user 	godoc
 // @Summary      create new user
@@ -34,19 +31,18 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	if err := validate.Struct(&user); err != nil {
+	if err := database.Validate.Struct(&user); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
 	param := c.Param("role")
 	if param == "" {
-		c.JSON(http.StatusBadRequest, errors.New("a user must be passed as either doctor or patient"))
+		c.JSON(http.StatusBadRequest, errors.New("a user must be passed with role as either doctor or patient").Error())
 	}
 
 	emailFilter := bson.D{{Key: "email", Value: user.Email}}
 	_, emailErr := database.GetMongoDoc(database.UserCollection, emailFilter)
 	if emailErr != nil {
 		user.Created_At = time.Now()
-		// user.Updated_At, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		user.ID = primitive.NewObjectID()
 
 		user.Role = param
@@ -94,7 +90,7 @@ func Signin(c *gin.Context) {
 		return
 	}
 
-	if err := validate.Struct(&user); err != nil {
+	if err := database.Validate.Struct(&user); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
 
@@ -143,7 +139,7 @@ func BookAppoitment(c *gin.Context) {
 		return
 	}
 
-	if err := validate.Struct(&app); err != nil {
+	if err := database.Validate.Struct(&app); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
 
@@ -202,19 +198,28 @@ func UpdateAppointment(c *gin.Context) {
 		return
 	}
 
-	if err := validate.Struct(&app); err != nil {
+	if err := database.Validate.Struct(&app); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	}
 	id := c.Param("id")
 	if id == "" {
-		c.JSON(http.StatusBadRequest, errors.New("id parameter is empty"))
+		c.JSON(http.StatusBadRequest, errors.New("id parameter is empty").Error())
 	}
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, fmt.Sprintf("error: %v", err))
 	}
 	filter := bson.D{{Key: "_id", Value: _id}}
-	data := bson.D{{Key: "firstname", Value: app.FirstName}, {Key: "lastname", Value: app.LastName}, {Key: "email", Value: app.Email}, {Key: "phonenumber", Value: app.PhoneNumber}, {Key: "time", Value: app.Time}, {Key: "date", Value: app.Date}, {Key: "specialist", Value: app.Specialist}, {Key: "message", Value: app.Message}}
+	data := bson.D{
+		{Key: "firstname", Value: app.FirstName},
+		{Key: "lastname", Value: app.LastName},
+		{Key: "email", Value: app.Email},
+		{Key: "phonenumber", Value: app.PhoneNumber},
+		{Key: "time", Value: app.Time},
+		{Key: "date", Value: app.Date},
+		{Key: "specialist", Value: app.Specialist},
+		{Key: "message", Value: app.Message},
+	}
 	updateRes, updateErr := database.UpdateMongoDoc(database.AppCollection, filter, data)
 	if updateErr != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

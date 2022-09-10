@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"medic/database"
 	_ "medic/docs"
 	"medic/entity"
 
@@ -50,9 +51,9 @@ func main() {
 		api.POST("/user/signup/:role", entity.Signup)
 		api.POST("/user/signin", entity.Signin)
 
-		api.POST("/book/appointment", entity.BookAppoitment)
-		api.GET("/appointments", entity.GetAppointments)
-		api.PUT("/appointment/:id", entity.UpdateAppointment)
+		api.POST("/book/appointment", entity.BookAppoitment).Use(database.Authentication)
+		api.GET("/appointments", entity.GetAppointments).Use(database.Authentication)
+		api.PUT("/appointment/:id", entity.UpdateAppointment).Use(database.Authentication)
 
 	}
 
