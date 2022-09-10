@@ -9,9 +9,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+var validate *validator.Validate
 
 // create new user 	godoc
 // @Summary      create new user
@@ -29,6 +32,10 @@ func Signup(c *gin.Context) {
 			"error": err.Error(),
 		})
 		return
+	}
+
+	if err := validate.Struct(&user); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
 	}
 	param := c.Param("role")
 	if param == "" {
@@ -87,6 +94,10 @@ func Signin(c *gin.Context) {
 		return
 	}
 
+	if err := validate.Struct(&user); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+	}
+
 	usernameilter := bson.D{{Key: "username", Value: user.Username}}
 	foundUser, usernameErr := GetUserDoc(database.UserCollection, usernameilter)
 	if usernameErr != nil {
@@ -130,6 +141,10 @@ func BookAppoitment(c *gin.Context) {
 			"error": err.Error(),
 		})
 		return
+	}
+
+	if err := validate.Struct(&app); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	app.ID = primitive.NewObjectID()
@@ -185,6 +200,10 @@ func UpdateAppointment(c *gin.Context) {
 			"error": err.Error(),
 		})
 		return
+	}
+
+	if err := validate.Struct(&app); err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
 	}
 	id := c.Param("id")
 	if id == "" {

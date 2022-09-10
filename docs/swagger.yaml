@@ -1,0 +1,161 @@
+basePath: /api/v1
+definitions:
+  database.Appointment:
+    properties:
+      _id:
+        type: string
+      created_at:
+        type: string
+      date:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      message:
+        type: string
+      phone_number:
+        type: string
+      specialist:
+        type: string
+      time:
+        type: string
+    required:
+    - date
+    - email
+    - first_name
+    - last_name
+    - message
+    - phone_number
+    - specialist
+    - time
+    type: object
+  database.AppointmentModel:
+    properties:
+      date:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      message:
+        type: string
+      phone_number:
+        type: string
+      specialist:
+        type: string
+      time:
+        type: string
+    type: object
+  database.SignIn:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  database.UserModel:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: medic0.herokuapp.com
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is the API serving the medic frontend
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: medic API
+  version: "1.0"
+paths:
+  /api/v1/appointment/:id:
+    put:
+      consumes:
+      - application/json
+      description: this endpoint is used to update an appointments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: update appointments
+      tags:
+      - appointment
+  /api/v1/appointments:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint is used to get all the appointments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: get all appointments
+      tags:
+      - appointment
+  /api/v1/book/appointment:
+    post:
+      consumes:
+      - application/json
+      description: this endpoint is used to create new appointment with a doctor
+      parameters:
+      - description: appointment
+        in: body
+        name: appointment
+        required: true
+        schema:
+          $ref: '#/definitions/database.AppointmentModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: book appointment
+      tags:
+      - appointment
+  /api/v1/user/signup/:role:
+    post:
+      consumes:
+      - application/json
+      description: this endpoint is used create a user with role as either patient
+        or doctor by passing the role of the user to the URL
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/database.UserModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: create new user
+      tags:
+      - user
+schemes:
+- https
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

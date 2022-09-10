@@ -3,12 +3,10 @@ package main
 import (
 	"log"
 	"os"
-	"time"
 
-	// _ "medic/docs"
+	_ "medic/docs"
 	"medic/entity"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
@@ -27,9 +25,9 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host                       127.0.0.1:8000
+// @host                       medic0.herokuapp.com
 // @BasePath                   /api/v1
-// @schemes                    http
+// @schemes                    https
 // @query.collection.format    multi
 // @securityDefinitions.basic  BasicAuth
 func main() {
@@ -40,18 +38,7 @@ func main() {
 
 	r := gin.Default()
 	config := CORSMiddleware()
- r.Use(config)
-// 	r.Use(cors.New(cors.Config{
-// 		AllowOrigins:     []string{"*"},
-// 		AllowMethods:     []string{"PUT", "GET", "POST", "DELETE"},
-// 		AllowHeaders:     []string{"Origin"},
-// 		ExposeHeaders:    []string{"Content-Length"},
-// 		AllowCredentials: true,
-// 		// AllowOriginFunc: func(origin string) bool {
-// 		//  return origin == "https://mseamless.herokuapp.com"
-// 		// },
-// 		MaxAge: 12 * time.Hour,
-// 	}))
+	r.Use(config)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -75,17 +62,17 @@ func main() {
 }
 
 func CORSMiddleware() gin.HandlerFunc {
- return func(c *gin.Context) {
-  c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-  c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-  c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-  c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 
-  if c.Request.Method == "OPTIONS" {
-   c.AbortWithStatus(204)
-   return
-  }
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
 
-  c.Next()
- }
+		c.Next()
+	}
 }
