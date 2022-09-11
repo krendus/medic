@@ -173,7 +173,7 @@ func BookAppoitment(c *gin.Context) {
 // @Router       /api/v1/appointments/:id [get]
 func GetAppointments(c *gin.Context) {
 	param := c.Param("id")
-	if param == "" {
+	if param == "all" {
 		filter := bson.D{}
 		res, err := database.GetMongoDocs(database.AppCollection, filter)
 		if err != nil {
@@ -186,7 +186,7 @@ func GetAppointments(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 
 	} else {
-		filter := bson.M{"user_id": param}
+		filter := bson.M{"userid": param}
 		res, err := database.GetMongoDocs(database.AppCollection, filter)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
