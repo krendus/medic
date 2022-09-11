@@ -13,47 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// func CreateDoctor(c *gin.Context) {
-// 	var d database.Doctor
-
-// 	if err := c.BindJSON(&d); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-
-// 	if err := database.Validate.Struct(&d); err != nil {
-// 		c.JSON(http.StatusBadRequest, err.Error())
-// 	}
-
-// 	filter := bson.D{{Key: "email", Value: d.DoctorName}}
-// 	_, emailErr := database.GetMongoDoc(database.UserCollection, filter)
-// 	if emailErr != nil {
-// 		d.Created_At = time.Now()
-// 		d.ID = primitive.NewObjectID()
-
-// 		d.Role = "doctor"
-
-// 		_, insertErr := database.CreateMongoDoc(database.UserCollection, &d)
-// 		if insertErr != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{
-// 				"error": insertErr.Error(),
-// 			})
-// 			return
-// 		}
-
-// 		c.JSON(http.StatusOK, gin.H{
-// 			"user": userInfo,
-// 		})
-// 	} else {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": errors.New("doctor name taken").Error(),
-// 		})
-// 		return
-// 	}
-// }
-
 // create new user 	godoc
 // @Summary      create new user
 // @Description  this endpoint is used create a user with role as either patient or doctor by passing the role of the user to the URL
@@ -74,6 +33,7 @@ func Signup(c *gin.Context) {
 
 	if err := database.Validate.Struct(&user); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 	param := c.Param("role")
 	if param == "" {
@@ -133,6 +93,7 @@ func Signin(c *gin.Context) {
 
 	if err := database.Validate.Struct(&user); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	usernameilter := bson.D{{Key: "username", Value: user.Username}}
@@ -182,6 +143,7 @@ func BookAppoitment(c *gin.Context) {
 
 	if err := database.Validate.Struct(&app); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	app.ID = primitive.NewObjectID()
@@ -262,6 +224,7 @@ func UpdateAppointment(c *gin.Context) {
 
 	if err := database.Validate.Struct(&app); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 	id := c.Param("id")
 	if id == "" {
