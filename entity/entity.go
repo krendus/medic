@@ -174,7 +174,7 @@ func BookAppoitment(c *gin.Context) {
 func GetAppointments(c *gin.Context) {
 	param := c.Param("id")
 	if param == "" {
-		filter := bson.M{}
+		filter := bson.M{"user_id": ""}
 		res, err := database.GetMongoDocs(database.AppCollection, filter)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
