@@ -185,8 +185,7 @@ func GetAppointments(c *gin.Context) {
 
 		c.JSON(http.StatusOK, res)
 	} else {
-		_id, _ := primitive.ObjectIDFromHex(param)
-		filter := bson.M{"user_id": _id}
+		filter := bson.M{"user_id": param}
 		res, err := database.GetMongoDocs(database.AppCollection, filter)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
