@@ -75,13 +75,15 @@ type AppointmentModel struct {
 }
 
 type PubUser struct {
-	FullName string `json:"full_name"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	ID       primitive.ObjectID `json:"_id" bson:"_id"`
+	FullName string             `json:"full_name"`
+	Username string             `json:"username"`
+	Email    string             `json:"email"`
 }
 
 func PublicUser(user *User) *PubUser {
 	return &PubUser{
+		ID:       user.ID,
 		FullName: user.FullName,
 		Username: user.Username,
 		Email:    user.Email,
