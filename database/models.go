@@ -6,43 +6,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// type Doctor struct {
-// 	ID         primitive.ObjectID `json:"_id" bson:"_id"`
-// 	DoctorName string             `json:"doctor_name" validate:"required"`
-// 	Occupation string             `json:"occupation" validate:"required"`
-// 	Role       string             `json:"role"`
-// 	Created_At time.Time          `json:"created_at"`
-// }
-
-// type PubDoctor struct {
-// 	DoctorName string `json:"doctor_name" validate:"required"`
-// 	Occupation string `json:"occupation" validate:"required"`
-// 	Role       string `json:"role"`
-// }
-
-// func PublicDostor(d *Doctor) *PubDoctor {
-// 	return &PubDoctor{
-// 		DoctorName: d.DoctorName,
-// 		Occupation: d.Occupation,
-// 		Role:       d.Role,
-// 	}
-// }
-
 type User struct {
-	ID         primitive.ObjectID `json:"_id" bson:"_id"`
-	FullName   string             `json:"full_name" validate:"required"`
-	Username   string             `json:"username" validate:"required"`
-	Email      string             `json:"email" validate:"required"`
-	Role       string             `json:"role"`
-	Password   string             `json:"password" validate:"required"`
-	Created_At time.Time          `json:"created_at"`
+	ID             primitive.ObjectID `json:"_id" bson:"_id"`
+	FullName       string             `json:"full_name" validate:"required"`
+	Username       string             `json:"username" validate:"required"`
+	Email          string             `json:"email" validate:"required"`
+	Role           string             `json:"role"`
+	Specialization string             `json:"specialization" bson:"omitempty"`
+	Password       string             `json:"password" validate:"required"`
+	Created_At     time.Time          `json:"created_at"`
 }
 
 type UserModel struct {
-	FullName string `json:"full_name"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	FullName       string `json:"full_name"`
+	Username       string `json:"username"`
+	Email          string `json:"email"`
+	Role           string `json:"role"`
+	Specialization string `json:"specialization"`
+	Password       string `json:"password"`
 }
 
 type SignIn struct {
@@ -52,6 +33,7 @@ type SignIn struct {
 
 type Appointment struct {
 	ID          primitive.ObjectID `json:"_id" bson:"_id"`
+	UserId      string             `json:"user_id"`
 	FirstName   string             `json:"first_name" validate:"required"`
 	LastName    string             `json:"last_name" validate:"required"`
 	PhoneNumber string             `json:"phone_number" validate:"required"`
@@ -75,17 +57,21 @@ type AppointmentModel struct {
 }
 
 type PubUser struct {
-	ID       primitive.ObjectID `json:"_id" bson:"_id"`
-	FullName string             `json:"full_name"`
-	Username string             `json:"username"`
-	Email    string             `json:"email"`
+	ID             primitive.ObjectID `json:"_id" bson:"_id"`
+	FullName       string             `json:"full_name"`
+	Username       string             `json:"username"`
+	Email          string             `json:"email"`
+	Role           string             `json:"role"`
+	Specialization string             `json:"specialization"`
 }
 
 func PublicUser(user *User) *PubUser {
 	return &PubUser{
-		ID:       user.ID,
-		FullName: user.FullName,
-		Username: user.Username,
-		Email:    user.Email,
+		ID:             user.ID,
+		FullName:       user.FullName,
+		Username:       user.Username,
+		Email:          user.Email,
+		Role:           user.Role,
+		Specialization: user.Specialization,
 	}
 }

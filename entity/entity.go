@@ -170,18 +170,33 @@ func BookAppoitment(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Success      200
-// @Router       /api/v1/appointments [get]
+// @Router       /api/v1/appointments/:id [get]
 func GetAppointments(c *gin.Context) {
-	filter := bson.M{}
-	res, err := database.GetMongoDocs(database.AppCollection, filter)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": errors.New("no appointments at the moment").Error(),
-		})
-		return
-	}
+	param := c.Param("id")
+	if param == "" {
+		filter := bson.M{}
+		res, err := database.GetMongoDocs(database.AppCollection, filter)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": errors.New("no appointments at the moment").Error(),
+			})
+			return
+		}
 
-	c.JSON(http.StatusOK, res)
+		c.JSON(http.StatusOK, res)
+	} else {
+		_id, _ := primitive.ObjectIDFromHex(param)
+		filter := bson.M{"user_id": _id}
+		res, err := database.GetMongoDocs(database.AppCollection, filter)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": errors.New("no appointments at the moment").Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res)
+	}
 }
 
 // get all doctors 	godoc
