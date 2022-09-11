@@ -170,33 +170,32 @@ func BookAppoitment(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Success      200
-// @Router       /api/v1/appointments/:id [get]
-func GetAppointments(c *gin.Context) {
-	param := c.Param("id")
-	if param == "all" {
-		filter := bson.D{}
-		res, err := database.GetMongoDocs(database.AppCollection, filter)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": errors.New("no appointments at the moment").Error(),
-			})
-			return
-		}
-
-		c.JSON(http.StatusOK, res)
-
-	} else {
-		filter := bson.M{"userid": param}
-		res, err := database.GetMongoDocs(database.AppCollection, filter)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": errors.New("no appointments at the moment").Error(),
-			})
-			return
-		}
-
-		c.JSON(http.StatusOK, res)
+// @Router       /api/v1/appointments/all [get]
+func GetAllAppointments(c *gin.Context) {
+	filter := bson.D{}
+	res, err := database.GetMongoDocs(database.AppCollection, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": errors.New("no appointments at the moment").Error(),
+		})
+		return
 	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+func GetUserAppointments(c *gin.Context) {
+	param := c.Param("id")
+	filter := bson.M{"userid": param}
+	res, err := database.GetMongoDocs(database.AppCollection, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": errors.New("no appointments at the moment").Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 // get all doctors 	godoc
