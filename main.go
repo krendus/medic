@@ -51,8 +51,8 @@ func main() {
 		api.POST("/user/signup/:role", entity.Signup)
 		api.POST("/user/signin", entity.Signin)
 
-		api.POST("/book/appointment", entity.BookAppoitment)
-		api.GET("/appointments/:id", entity.GetAppointments)
+		api.POST("/book/appointment", entity.BookAppoitment).Use(database.Authentication)
+		api.GET("/appointments/:id", entity.GetAppointments).Use(database.Authentication)
 		api.PUT("/appointment/:id", entity.UpdateAppointment).Use(database.Authentication)
 		api.GET("/doctors", entity.GetDoctors).Use(database.Authentication)
 
