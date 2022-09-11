@@ -13,6 +13,47 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// func CreateDoctor(c *gin.Context) {
+// 	var d database.Doctor
+
+// 	if err := c.BindJSON(&d); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
+
+// 	if err := database.Validate.Struct(&d); err != nil {
+// 		c.JSON(http.StatusBadRequest, err.Error())
+// 	}
+
+// 	filter := bson.D{{Key: "email", Value: d.DoctorName}}
+// 	_, emailErr := database.GetMongoDoc(database.UserCollection, filter)
+// 	if emailErr != nil {
+// 		d.Created_At = time.Now()
+// 		d.ID = primitive.NewObjectID()
+
+// 		d.Role = "doctor"
+
+// 		_, insertErr := database.CreateMongoDoc(database.UserCollection, &d)
+// 		if insertErr != nil {
+// 			c.JSON(http.StatusInternalServerError, gin.H{
+// 				"error": insertErr.Error(),
+// 			})
+// 			return
+// 		}
+
+// 		c.JSON(http.StatusOK, gin.H{
+// 			"user": userInfo,
+// 		})
+// 	} else {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": errors.New("doctor name taken").Error(),
+// 		})
+// 		return
+// 	}
+// }
+
 // create new user 	godoc
 // @Summary      create new user
 // @Description  this endpoint is used create a user with role as either patient or doctor by passing the role of the user to the URL
@@ -174,6 +215,27 @@ func GetAppointments(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": errors.New("no appointments at the moment").Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// get all doctors 	godoc
+// @Summary      get all doctors
+// @Description  this endpoint is used to get all the doctors
+// @Tags         appointment
+// @Accept       json
+// @Produce      json
+// @Success      200
+// @Router       /api/v1/doctors [get]
+func GetDoctors(c *gin.Context) {
+	filter := bson.M{"role": "doctor"}
+	res, err := database.GetMongoDocs(database.UserCollection, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": errors.New("no doctors at the moment").Error(),
 		})
 		return
 	}

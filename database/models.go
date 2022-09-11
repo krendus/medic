@@ -6,6 +6,28 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// type Doctor struct {
+// 	ID         primitive.ObjectID `json:"_id" bson:"_id"`
+// 	DoctorName string             `json:"doctor_name" validate:"required"`
+// 	Occupation string             `json:"occupation" validate:"required"`
+// 	Role       string             `json:"role"`
+// 	Created_At time.Time          `json:"created_at"`
+// }
+
+// type PubDoctor struct {
+// 	DoctorName string `json:"doctor_name" validate:"required"`
+// 	Occupation string `json:"occupation" validate:"required"`
+// 	Role       string `json:"role"`
+// }
+
+// func PublicDostor(d *Doctor) *PubDoctor {
+// 	return &PubDoctor{
+// 		DoctorName: d.DoctorName,
+// 		Occupation: d.Occupation,
+// 		Role:       d.Role,
+// 	}
+// }
+
 type User struct {
 	ID         primitive.ObjectID `json:"_id" bson:"_id"`
 	FullName   string             `json:"full_name" validate:"required"`

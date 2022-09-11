@@ -96,6 +96,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/doctors": {
+            "get": {
+                "description": "this endpoint is used to get all the doctors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointment"
+                ],
+                "summary": "get all doctors",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/api/v1/user/signup/:role": {
             "post": {
                 "description": "this endpoint is used create a user with role as either patient or doctor by passing the role of the user to the URL",

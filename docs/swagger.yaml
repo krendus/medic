@@ -132,6 +132,19 @@ paths:
       summary: book appointment
       tags:
       - appointment
+  /api/v1/doctors:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint is used to get all the doctors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: get all doctors
+      tags:
+      - appointment
   /api/v1/user/signup/:role:
     post:
       consumes:
