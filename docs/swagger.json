@@ -41,7 +41,7 @@
                 }
             }
         },
-        "/api/v1/appointments": {
+        "/api/v1/appointments/:id": {
             "get": {
                 "description": "this endpoint is used to get all the appointments",
                 "consumes": [
@@ -187,6 +187,9 @@
                 },
                 "time": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -244,6 +247,12 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "specialization": {
                     "type": "string"
                 },
                 "username": {

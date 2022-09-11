@@ -45,7 +45,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/appointments": {
+        "/api/v1/appointments/:id": {
             "get": {
                 "description": "this endpoint is used to get all the appointments",
                 "consumes": [
@@ -191,6 +191,9 @@ const docTemplate = `{
                 },
                 "time": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -248,6 +251,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "specialization": {
                     "type": "string"
                 },
                 "username": {
