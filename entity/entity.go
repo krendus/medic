@@ -83,7 +83,7 @@ func Signup(c *gin.Context) {
 // @Success      200
 // @Router       /api/v1/book/appointment [post]
 func Signin(c *gin.Context) {
-	var user *database.User
+	var user database.SignIn
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -115,7 +115,7 @@ func Signin(c *gin.Context) {
 	userInfo := database.PublicUser(foundUser)
 
 	//generate a token for the user on signup
-	token, refreshToken, _ := database.GenerateAllTokens(user.ID.Hex())
+	token, refreshToken, _ := database.GenerateAllTokens(userInfo.ID.Hex())
 	c.JSON(http.StatusOK, gin.H{
 		"token":         token,
 		"refresh_token": refreshToken,
