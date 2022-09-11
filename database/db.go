@@ -46,7 +46,7 @@ func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collecti
 }
 
 func GetMongoDoc(colName *mongo.Collection, filter interface{}) (*User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	var data User
@@ -59,7 +59,7 @@ func GetMongoDoc(colName *mongo.Collection, filter interface{}) (*User, error) {
 }
 
 func GetMongoDocs(colName *mongo.Collection, filter interface{}, opts ...*options.FindOptions) ([]bson.M, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	var data []bson.M
@@ -77,7 +77,7 @@ func GetMongoDocs(colName *mongo.Collection, filter interface{}, opts ...*option
 }
 
 func CreateMongoDoc(colName *mongo.Collection, data interface{}) (*mongo.InsertOneResult, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	insertNum, insertErr := colName.InsertOne(ctx, data)
@@ -89,7 +89,7 @@ func CreateMongoDoc(colName *mongo.Collection, data interface{}) (*mongo.InsertO
 }
 
 func UpdateMongoDoc(colName *mongo.Collection, filter interface{}, data interface{}) (*mongo.UpdateResult, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// _id, err := primitive.ObjectIDFromHex(id)
 	// if err != nil {
