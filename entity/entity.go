@@ -229,7 +229,7 @@ func GetDoctors(c *gin.Context) {
 // @Success      200
 // @Router       /api/v1/appointment/:id [put]
 func UpdateAppointment(c *gin.Context) {
-	var app *database.Appointment
+	var app database.Appointment
 	if err := c.BindJSON(&app); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
